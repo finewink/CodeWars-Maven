@@ -14,6 +14,11 @@ public class NumberOfTrailingZerosOfNTest {
     }
 
     @Test
+    public void testZeros99() throws Exception {
+        assertThat(NumberOfTrailingZerosOfN.zeros(99), is(22));
+    }
+
+    @Test
     public void testZeros2() throws Exception {
         assertThat(NumberOfTrailingZerosOfN.zeros(125), is(31));
     }
@@ -29,12 +34,22 @@ public class NumberOfTrailingZerosOfNTest {
     }
 
     @Test
-    public void testZeros5() throws Exception {
+    public void testZeros149() throws Exception {
         assertThat(NumberOfTrailingZerosOfN.zeros(149), is(35));
     }
 
     @Test
-    public void testZeros6() throws Exception {
+    public void testZeros150() throws Exception {
         assertThat(NumberOfTrailingZerosOfN.zeros(150), is(37));
+    }
+
+    @Test
+    public void testZeros1000() throws Exception {
+        assertThat(NumberOfTrailingZerosOfN.zeros(1000), is(249));
+    }
+
+    @Test
+    public void testZeros999() throws Exception {
+        assertThat(NumberOfTrailingZerosOfN.zeros(999), is(246));
     }
 }
