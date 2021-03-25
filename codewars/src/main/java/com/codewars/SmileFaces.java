@@ -1,7 +1,6 @@
 package com.codewars;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * 

@@ -1,8 +1,5 @@
 package com.codewars;
 
-import java.util.Arrays;
-import java.util.stream.IntStream;
-
 /**
  * An isogram is a word that has no repeating letters, consecutive or
  * non-consecutive. Implement a function that determines whether a string that

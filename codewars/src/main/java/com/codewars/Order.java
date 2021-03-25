@@ -6,13 +6,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class Order {
-    public static void main(String[] args) {
-        String s = order("");
-        Order app = new Order();
-        System.out.println(s);
-
-    }
-
     public static String order(String words) {
         // ...
         String[] wordList = words.split(" ");
