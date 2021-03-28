@@ -16,13 +16,14 @@ public class PermutationN {
             return;
         }
 
-        for (int i = k; i < l; i++) {
-            if (visited[i]) {
+        for (int i = 0; i < l; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                output[k] = numbers[i];
+                perm(numbers, output, visited, n, k + 1, l);
+                visited[i] = false;
 
             }
-            output[k] = numbers[i];
-            perm(numbers, output, visited, n, k + 1, l);
-
         }
     }
 
