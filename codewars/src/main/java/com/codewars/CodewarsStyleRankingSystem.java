@@ -9,42 +9,56 @@ public class CodewarsStyleRankingSystem {
 
     public int incProgress(int rank) {
         if (Arrays.binarySearch(rankTable, rank) < 0) {
-            rank = rankTable[Arrays.binarySearch(rankTable, rank)];// on purpose raise exception;
+            int exc = rankTable[Arrays.binarySearch(rankTable, rank)];// on purpose raise exception;
         }
-        this.progress += calcPoint(rank);
-        this.rank = calcRank(this.progress);
+        int point = calcPoint(rank);
+
+        int rankPlus = calcRankPlus(point);
+
+        //this.progress = progress % 100;
+        this.rank = getRank(getRankIndex(this.rank) + rankPlus);
+        if(this.rank != rankTable[rankTable.length - 1]){
+            this.progress += point - (rankPlus * 100);
+        }
+        else{
+            this.progress = 0;
+        }        
 
         return this.rank;
     }
 
-    private int calcPoint(int actRank) {
-        int userRank = getRank(calcRank(this.progress));
-        int diff = getRankTableIndex(actRank) - userRank;
-        if (diff < -1) {
-            return 0;
-        } else if (diff == -1) {
-            return 1;
-        } else if (diff == 0) {
-            return 3;
-        } else {
-            return 10 * diff * diff;
+    private int getRank(int rankIndex) {
+        if(rankIndex > rankTable.length - 1){
+            return rankTable[rankTable.length - 1];
         }
+        return rankTable[rankIndex];
     }
 
-    private int calcRank(int progress) {
-        int rank = progress / 100;
-        if (rank >= rankTable.length) {
-            rank = rankTable.length - 1;
+    private int calcRankPlus(int point) {
+        int remain = this.progress % 100;
+        
+        return (remain + point) / 100;
+    }
+
+    public int calcPoint(int actRank){
+        int userIndex = getRankIndex(this.rank);
+        int actIndex = getRankIndex(actRank);
+        int diff = actIndex - userIndex;
+        int point = 0;
+        if(diff < -1){
+            point = 0;
+        }else if(diff == -1){
+            point = 1;
+        }else if(diff == 0){
+            point = 3;
+        }else{
+            point = 10 * diff * diff;
         }
-
-        return rank;
+        
+        return point;
     }
 
-    private int getRank(int index) {
-        return rankTable[index];
-    }
-
-    private int getRankTableIndex(int rank) {
+    private int getRankIndex(int rank) {
         return Arrays.binarySearch(rankTable, rank);
     }
 
