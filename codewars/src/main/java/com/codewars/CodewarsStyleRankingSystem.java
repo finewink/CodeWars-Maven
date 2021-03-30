@@ -9,26 +9,27 @@ public class CodewarsStyleRankingSystem {
 
     public int incProgress(int rank) {
         if (Arrays.binarySearch(rankTable, rank) < 0) {
-            int exc = rankTable[Arrays.binarySearch(rankTable, rank)];// on purpose raise exception;
+            // int exc = rankTable[Arrays.binarySearch(rankTable, rank)];// on purpose raise
+            // exception;
+            throw new RuntimeException("rank out of range");
         }
         int point = calcPoint(rank);
 
         int rankPlus = calcRankPlus(point);
 
-        //this.progress = progress % 100;
+        // this.progress = progress % 100;
         this.rank = getRank(getRankIndex(this.rank) + rankPlus);
-        if(this.rank != rankTable[rankTable.length - 1]){
+        if (this.rank != rankTable[rankTable.length - 1]) {
             this.progress += point - (rankPlus * 100);
-        }
-        else{
+        } else {
             this.progress = 0;
-        }        
+        }
 
         return this.rank;
     }
 
     private int getRank(int rankIndex) {
-        if(rankIndex > rankTable.length - 1){
+        if (rankIndex > rankTable.length - 1) {
             return rankTable[rankTable.length - 1];
         }
         return rankTable[rankIndex];
@@ -36,25 +37,25 @@ public class CodewarsStyleRankingSystem {
 
     private int calcRankPlus(int point) {
         int remain = this.progress % 100;
-        
+
         return (remain + point) / 100;
     }
 
-    public int calcPoint(int actRank){
+    public int calcPoint(int actRank) {
         int userIndex = getRankIndex(this.rank);
         int actIndex = getRankIndex(actRank);
         int diff = actIndex - userIndex;
         int point = 0;
-        if(diff < -1){
+        if (diff < -1) {
             point = 0;
-        }else if(diff == -1){
+        } else if (diff == -1) {
             point = 1;
-        }else if(diff == 0){
+        } else if (diff == 0) {
             point = 3;
-        }else{
+        } else {
             point = 10 * diff * diff;
         }
-        
+
         return point;
     }
 
