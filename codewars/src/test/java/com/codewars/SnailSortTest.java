@@ -2,9 +2,7 @@ package com.codewars;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runners.JUnit4;
 import java.util.Arrays;
-import java.util.Random;
 import static java.util.stream.Collectors.joining;
 
 public class SnailSortTest {

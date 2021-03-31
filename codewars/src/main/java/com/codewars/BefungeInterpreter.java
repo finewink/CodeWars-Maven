@@ -1,6 +1,5 @@
 package com.codewars;
 
-import java.io.CharArrayReader;
 import java.util.Random;
 import java.util.Stack;
 
@@ -11,29 +10,32 @@ public class BefungeInterpreter {
     public String interpret(String code) {
         String[] lines = code.split("\n");
         char[][] plane = new char[lines.length][];
-        for(int i = 0 ; i < lines.length ; i++){
+        for (int i = 0; i < lines.length; i++) {
             plane[i] = lines[i].toCharArray();
         }
         next(plane, 0, 0, 1, 0, false);
-        
+
         return output.toString();
     }
 
     /**
      * 
-     * @param plane befunge plane
-     * @param line  Nth line: indicate plane[line]
-     * @param index Nth index of a line: indicate plane[line][index]
-     * @param directionX horizontal direction. 1 to right, -1 to left. 0 means vertical move.
-     * @param directionY vertical direction. 1 to down, -1 to up. 0 means horizontal move.
+     * @param plane      befunge plane
+     * @param line       Nth line: indicate plane[line]
+     * @param index      Nth index of a line: indicate plane[line][index]
+     * @param directionX horizontal direction. 1 to right, -1 to left. 0 means
+     *                   vertical move.
+     * @param directionY vertical direction. 1 to down, -1 to up. 0 means horizontal
+     *                   move.
      */
-    public void next(char[][] plane, int line, int index, int directionX, int directionY, boolean mode){
+    public void next(char[][] plane, int line, int index, int directionX, int directionY, boolean mode) {
         char value = plane[line][index];
-        //System.out.println(value);
 
-        do{
-            
-            switch(value){
+        do {
+            if (mode & value != '"') {
+                stack.push((int) value);
+            } else {
+                switch (value) {
                 case '0':
                 case '1':
                 case '2':
@@ -43,144 +45,135 @@ public class BefungeInterpreter {
                 case '6':
                 case '7':
                 case '8':
-                case '9':{
-                    if(!mode){
+                case '9': {
+                    if (!mode) {
                         stack.push(Character.getNumericValue(value));
-                    }
-                    else{
-                        stack.push((int)value);
+                    } else {
+                        stack.push((int) value);
                     }
                     break;
                 }
-                    
-                case '+':{
+                case '+': {
                     int a = stack.pop();
                     int b = stack.pop();
                     stack.push(a + b);
                     break;
                 }
-                    
-                case '-':{
+                case '-': {
                     int a = stack.pop();
                     int b = stack.pop();
                     stack.push(b - a);
                     break;
                 }
-                case '*':{
+                case '*': {
                     int a = stack.pop();
                     int b = stack.pop();
                     stack.push(b * a);
                     break;
                 }
-                case '/':{
+                case '/': {
                     int a = stack.pop();
                     int b = stack.pop();
                     stack.push(b / a);
                     break;
                 }
-                case '%':{
+                case '%': {
                     int a = stack.pop();
                     int b = stack.pop();
                     stack.push(b % a);
                     break;
                 }
-                case '!':{
+                case '!': {
                     int a = stack.pop();
-                    if(a == 0){
+                    if (a == 0) {
                         stack.push(1);
-                    }
-                    else{
+                    } else {
                         stack.push(0);
                     }
                     break;
                 }
-                case '`':{
+                case '`': {
                     int a = stack.pop();
                     int b = stack.pop();
-                    if(b>a){
+                    if (b > a) {
                         stack.push(1);
-                    }else{
+                    } else {
                         stack.push(0);
                     }
                     break;
                 }
-                case '>':{
+                case '>': {
                     directionX = 1;
                     directionY = 0;
                     break;
                 }
-                case '<':{
+                case '<': {
                     directionX = -1;
                     directionY = 0;
                     break;
                 }
-                case '^':{
+                case '^': {
                     directionX = 0;
                     directionY = -1;
                     break;
                 }
-                case 'v':{
+                case 'v': {
                     directionX = 0;
                     directionY = 1;
                     break;
                 }
-                case '?':{
+                case '?': {
                     directionX = new Random().nextInt(3) - 1;
-                    if(directionX == 0){
-                        directionY = new Random().nextBoolean() ? 1 : 0;
-                    }
-                    else{
+                    if (directionX == 0) {
+                        directionY = new Random().nextBoolean() ? 1 : -1;
+                    } else {
                         directionY = 0;
                     }
                     break;
                 }
-                case '_':{
+                case '_': {
                     int a = stack.pop();
-                    if(a == 0) {
+                    if (a == 0) {
                         directionX = 1;
                         directionY = 0;
                         break;
-                    }
-                    else{
+                    } else {
                         directionX = -1;
                         directionY = 0;
                         break;
                     }
                 }
-                case '|':{
+                case '|': {
                     int a = stack.pop();
-                    if(a == 0) {
+                    if (a == 0) {
                         directionX = 0;
                         directionY = 1;
                         break;
-                    }
-                    else{
+                    } else {
                         directionX = 0;
                         directionY = -1;
                         break;
                     }
                 }
-                case '"':{
+                case '"': {
                     mode = !mode;
                     break;
                 }
-                case ':':{
-                    if(stack.empty()){
+                case ':': {
+                    if (stack.empty()) {
                         stack.push(0);
-                    }
-                    else{
+                    } else {
                         stack.push(stack.peek());
                     }
                     break;
                 }
-                case '\\':{
-                    if(!stack.empty()){
+                case '\\': {
+                    if (!stack.empty()) {
                         int a = stack.pop();
-                        if(stack.isEmpty()){
+                        if (stack.isEmpty()) {
                             stack.push(a);
                             stack.push(0);
-                        }
-                        else{
+                        } else {
                             int b = stack.pop();
                             stack.push(a);
                             stack.push(b);
@@ -188,74 +181,71 @@ public class BefungeInterpreter {
                     }
                     break;
                 }
-                case '$':{
+                case '$': {
                     stack.pop();
                     break;
                 }
-                case '.':{
+                case '.': {
                     output.append(stack.pop());
                     break;
                 }
-                case ',':{
-                    output.append((char)stack.pop().intValue());
+                case ',': {
+                    output.append((char) stack.pop().intValue());
                     break;
                 }
-                case '#':{
+                case '#': {
                     directionX = directionX * 2;
                     directionY = directionY * 2;
                     break;
                 }
-                case 'p':{
+                case 'p': {
                     int y = stack.pop();
                     int x = stack.pop();
                     int v = stack.pop();
-                    plane[x][y] = (char) v;
+                    plane[y][x] = (char) v;
                     break;
                 }
-                case 'g':{
+                case 'g': {
                     int y = stack.pop();
                     int x = stack.pop();
-                    //TODO
-                    //plane[x][y] = Character.getNumericValue(value);
+
+                    stack.push((int) plane[y][x]);
                     break;
                 }
-                case '@':{
-                    while(!stack.empty()){
+                case '@': {
+                    while (!stack.empty()) {
                         int a = stack.pop();
-                        if(a < 10){
+                        if (a < 10) {
                             output.append(a);
-                        }
-                        else{
+                        } else {
                             output.append((char) a);
                         }
                     }
                     return;
                 }
-                case ' ':{
+                case ' ': {
                     break;
                 }
-                default:{
-                    System.out.println(" exception!! ");
+                default: {
+                    if (mode) {
+                        stack.push((int) value);
+                    }
+
+                    break;
+                }
                 }
             }
-            //next(plane, line + directionY, index + directionX, directionX, directionY, mode);
-            
-            // if(Math.abs(directionX) > 1){
-            //     directionY = directionX / 2;
-            // }
-            // if(Math.abs(directionY) > 1){
-            //     directionY = directionY / 2;
-            // }
+
             line = line + directionY;
             index = index + directionX;
             value = plane[line][index];
-            System.out.println(value);
-            if(Math.abs(directionX) > 1){
-                directionY = directionX / 2;
+
+            if (Math.abs(directionX) > 1) {
+                directionX = directionX / 2;
             }
-            if(Math.abs(directionY) > 1){
+            if (Math.abs(directionY) > 1) {
                 directionY = directionY / 2;
-            }    
-        }while(value != '@');
+            }
+        } while (value != '@');
     }
 }
